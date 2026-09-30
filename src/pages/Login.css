@@ -1,0 +1,24 @@
+.portal-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.25) 0%, rgba(236, 72, 153, 0.15) 50%, transparent 80%);
+}
+
+.floating-badge {
+  animation: float-badge 5s ease-in-out infinite;
+}
+
+@keyframes float-badge {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (max-width: 768px) {
+  .floating-badge {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-badge {
+    animation: none;
+  }
+}

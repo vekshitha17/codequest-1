@@ -1,0 +1,421 @@
+{
+  "info": {
+    "_postman_id": "c0de9e57-2026-4quest-909f-codequestatlas",
+    "name": "CodeQuest API Collection",
+    "description": "Comprehensive REST API collection for CodeQuest: Learn • Play • Code • Conquer. Includes tests, authentication token auto-capture, and role-based endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "topicId",
+      "value": "py_1",
+      "type": "string"
+    },
+    {
+      "key": "gameId",
+      "value": "g_1",
+      "type": "string"
+    },
+    {
+      "key": "quizId",
+      "value": "q_1",
+      "type": "string"
+    },
+    {
+      "key": "challengeId",
+      "value": "c_1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "System Health",
+      "item": [
+        {
+          "name": "1. System Health Check (/health)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('System is online with active Atlas database', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.status).to.eql('online');",
+                  "    pm.expect(json.database.isConnected).to.eql(true);",
+                  "    pm.expect(json.database.mode).to.eql('atlas');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "1. Register Student",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"PixelKnight\",\n  \"email\": \"knight@codequest.dev\",\n  \"password\": \"AdventurePass123\",\n  \"confirmPassword\": \"AdventurePass123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201 or 409', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201, 409]);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. Student Login (Capture {{token}})",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailOrUsername\": \"coder@codequest.dev\",\n  \"password\": \"Student@CodeQuest2026\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.token);",
+                  "    console.log('Saved student token to collection variables');",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. Get Current User (/auth/me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "1. Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/users/profile", "host": ["{{baseUrl}}"], "path": ["users", "profile"] }
+          }
+        },
+        {
+          "name": "2. Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"avatar\": \"robot_avatar_2\",\n  \"currentWorld\": \"python\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/users/profile", "host": ["{{baseUrl}}"], "path": ["users", "profile"] }
+          }
+        },
+        {
+          "name": "3. Get User Aggregate Progress",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/users/progress", "host": ["{{baseUrl}}"], "path": ["users", "progress"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Topics",
+      "item": [
+        {
+          "name": "1. Get All Topics",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/topics", "host": ["{{baseUrl}}"], "path": ["topics"] }
+          }
+        },
+        {
+          "name": "2. Get Single Topic",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/topics/{{topicId}}", "host": ["{{baseUrl}}"], "path": ["topics", "{{topicId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Games",
+      "item": [
+        {
+          "name": "1. Get Games",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/games", "host": ["{{baseUrl}}"], "path": ["games"] }
+          }
+        },
+        {
+          "name": "2. Get Game by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/games/{{gameId}}", "host": ["{{baseUrl}}"], "path": ["games", "{{gameId}}"] }
+          }
+        },
+        {
+          "name": "3. Complete Game (+20 XP)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 100,\n  \"attempts\": 1\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/games/{{gameId}}/complete", "host": ["{{baseUrl}}"], "path": ["games", "{{gameId}}", "complete"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quizzes",
+      "item": [
+        {
+          "name": "1. Get Quizzes",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/quizzes", "host": ["{{baseUrl}}"], "path": ["quizzes"] }
+          }
+        },
+        {
+          "name": "2. Get Quiz by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/quizzes/{{quizId}}", "host": ["{{baseUrl}}"], "path": ["quizzes", "{{quizId}}"] }
+          }
+        },
+        {
+          "name": "3. Submit Quiz Answers",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answers\": {\n    \"q1_1\": 1,\n    \"q1_2\": 2,\n    \"q1_3\": 2,\n    \"q1_4\": 1\n  }\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/quizzes/{{quizId}}/submit", "host": ["{{baseUrl}}"], "path": ["quizzes", "{{quizId}}", "submit"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Coding Challenges",
+      "item": [
+        {
+          "name": "1. Get Coding Challenges",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/coding", "host": ["{{baseUrl}}"], "path": ["coding"] }
+          }
+        },
+        {
+          "name": "2. Get Coding Challenge by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/coding/{{challengeId}}", "host": ["{{baseUrl}}"], "path": ["coding", "{{challengeId}}"] }
+          }
+        },
+        {
+          "name": "3. Submit Challenge Solution",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"def two_sum(a, b):\\n    return a + b\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/coding/{{challengeId}}/submit", "host": ["{{baseUrl}}"], "path": ["coding", "{{challengeId}}", "submit"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Progress",
+      "item": [
+        {
+          "name": "1. Get User Progress & Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/progress", "host": ["{{baseUrl}}"], "path": ["progress"] }
+          }
+        },
+        {
+          "name": "2. Get Topic Progress",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/progress/{{topicId}}", "host": ["{{baseUrl}}"], "path": ["progress", "{{topicId}}"] }
+          }
+        },
+        {
+          "name": "3. Record Progress & Complete Topic",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"topicId\": \"{{topicId}}\",\n  \"markTopicCompleted\": true,\n  \"world\": \"python\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/progress", "host": ["{{baseUrl}}"], "path": ["progress"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "1. Admin Login (Capture {{adminToken}})",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailOrUsername\": \"admin@codequest.dev\",\n  \"password\": \"Admin@CodeQuest2026\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.collectionVariables.set('adminToken', jsonData.token);",
+                  "    console.log('Saved admin token to collection variables');",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. Get All Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/admin/users", "host": ["{{baseUrl}}"], "path": ["admin", "users"] }
+          }
+        },
+        {
+          "name": "3. Get Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "url": { "raw": "{{baseUrl}}/admin/statistics", "host": ["{{baseUrl}}"], "path": ["admin", "statistics"] }
+          }
+        },
+        {
+          "name": "4. Admin Create Topic",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Bitwise Operators & Masks\",\n  \"slug\": \"bitwise-operators\",\n  \"world\": \"python\",\n  \"level\": 2,\n  \"order\": 13,\n  \"difficulty\": \"Intermediate\",\n  \"description\": \"Learn binary bitwise operations (&, |, ^, ~, <<, >>).\",\n  \"explanation\": \"Bitwise operators operate directly on binary integers at bit level.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/admin/topics", "host": ["{{baseUrl}}"], "path": ["admin", "topics"] }
+          }
+        }
+      ]
+    }
+  ]
+}

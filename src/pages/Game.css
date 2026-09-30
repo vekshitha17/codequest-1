@@ -1,0 +1,9 @@
+.game-stage-canvas {
+  background: radial-gradient(circle at 50% 50%, rgba(253, 242, 248, 0.8) 0%, rgba(245, 243, 255, 0.9) 100%);
+}
+
+.selected-game-option {
+  border-color: #8B5CF6 !important;
+  background-color: #EDE9FE !important;
+  color: #5B21B6 !important;
+}

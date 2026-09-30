@@ -1,0 +1,7 @@
+.topic-card {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.topic-card:hover {
+  transform: translateY(-4px);
+}

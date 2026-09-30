@@ -1,0 +1,25 @@
+.navbar-container {
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.nav-link {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.nav-link.active {
+  color: #7C3AED;
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8B5CF6, #EC4899);
+  border-radius: 9999px;
+}

@@ -1,0 +1,63 @@
+/* Dashboard subtle background styling and floating decorative symbols */
+.dashboard-wrapper {
+  background: radial-gradient(circle at 10% 10%, rgba(243, 232, 255, 0.6) 0%, transparent 40%),
+              radial-gradient(circle at 90% 20%, rgba(224, 242, 254, 0.6) 0%, transparent 45%),
+              radial-gradient(circle at 50% 90%, rgba(254, 242, 242, 0.5) 0%, transparent 50%),
+              linear-gradient(180deg, #faf5ff 0%, #f8fafc 100%);
+}
+
+.dashboard-bg-decoration {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.floating-symbol {
+  position: absolute;
+  font-family: monospace;
+  font-weight: 800;
+  color: rgba(147, 51, 234, 0.08);
+  user-select: none;
+  animation: floatSlow 8s ease-in-out infinite alternate;
+}
+
+.sym-1 { top: 8%; left: 4%; font-size: 2.5rem; animation-delay: 0s; }
+.sym-2 { top: 18%; right: 5%; font-size: 3rem; animation-delay: 1.5s; color: rgba(59, 130, 246, 0.08); }
+.sym-3 { top: 45%; left: 2%; font-size: 2.2rem; animation-delay: 2.5s; color: rgba(16, 185, 129, 0.08); }
+.sym-4 { top: 65%; right: 4%; font-size: 2.8rem; animation-delay: 1s; }
+.sym-5 { top: 85%; left: 6%; font-size: 2.5rem; animation-delay: 3s; color: rgba(244, 63, 94, 0.08); }
+.sym-6 { top: 32%; right: 12%; font-size: 1.5rem; animation-delay: 2s; color: rgba(245, 158, 11, 0.12); }
+.sym-7 { top: 78%; right: 15%; font-size: 1.8rem; animation-delay: 4s; color: rgba(147, 51, 234, 0.1); }
+
+@keyframes floatSlow {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
+  100% { transform: translateY(6px) rotate(-3deg); }
+}
+
+.stat-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+  .dashboard-bg-decoration {
+    display: none;
+  }
+  .stat-card:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-symbol {
+    animation: none;
+  }
+  .stat-card {
+    transition: none;
+  }
+}

@@ -1,0 +1,12 @@
+.coding-editor-textarea {
+  font-family: 'JetBrains Mono', monospace;
+  background-color: #181825;
+  color: #CDD6F4;
+  tab-size: 4;
+  line-height: 1.6;
+}
+
+.coding-editor-textarea:focus {
+  outline: none;
+  border-color: #A78BFA;
+}

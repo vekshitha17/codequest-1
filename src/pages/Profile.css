@@ -1,0 +1,7 @@
+.profile-avatar-option {
+  transition: all 0.2s ease;
+}
+
+.profile-avatar-option:hover {
+  transform: scale(1.05);
+}

@@ -1,0 +1,142 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Fredoka', cursive, sans-serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: #F8F9FE;
+    color: #1E1B4B;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .font-heading {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+/* Cute Floating Background Decorations */
+.cq-bg-ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0.7;
+}
+
+.cq-orb-1 {
+  position: absolute;
+  top: -10%;
+  left: -5%;
+  width: 500px;
+  height: 500px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(196, 181, 253, 0.25) 0%, rgba(244, 114, 182, 0.1) 60%, transparent 80%);
+  filter: blur(60px);
+}
+
+.cq-orb-2 {
+  position: absolute;
+  bottom: 5%;
+  right: -5%;
+  width: 550px;
+  height: 550px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(186, 230, 253, 0.3) 0%, rgba(167, 243, 208, 0.2) 60%, transparent 80%);
+  filter: blur(70px);
+}
+
+.cq-orb-3 {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(254, 215, 170, 0.2) 0%, rgba(251, 207, 232, 0.15) 70%, transparent 80%);
+  filter: blur(80px);
+}
+
+/* Glassmorphism Pastel Card */
+.cq-card {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.05), 0 8px 10px -6px rgba(99, 102, 241, 0.03);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cq-card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px -6px rgba(99, 102, 241, 0.12), 0 8px 10px -6px rgba(99, 102, 241, 0.05);
+  border-color: rgba(167, 139, 250, 0.4);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* ==========================================================
+   MOBILE & ACCESSIBILITY PERFORMANCE OPTIMIZATIONS
+   ========================================================== */
+@media (max-width: 768px) {
+  body {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cq-bg-ambient {
+    opacity: 0.35;
+  }
+
+  .cq-orb-1,
+  .cq-orb-2,
+  .cq-orb-3 {
+    filter: blur(25px);
+    width: 280px;
+    height: 280px;
+  }
+
+  .cq-card {
+    backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 14px -3px rgba(99, 102, 241, 0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .cq-orb-1,
+  .cq-orb-2,
+  .cq-orb-3 {
+    filter: none;
+  }
+}

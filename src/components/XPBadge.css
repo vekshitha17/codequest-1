@@ -1,0 +1,26 @@
+.xp-badge-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.xp-badge-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 80%
+  );
+  transform: rotate(30deg);
+  animation: shine 4s infinite linear;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) rotate(30deg); }
+  50%, 100% { transform: translateX(100%) rotate(30deg); }
+}
